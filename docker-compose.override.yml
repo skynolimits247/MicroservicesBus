@@ -1,0 +1,44 @@
+version: '3.4'
+
+services:
+  apigateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "8888:80"
+      #- "443"
+    links:
+       - "microservicesbus.appointment.api:microservicesbus.user.api"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  microservicesbus.appointment.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ServiceConfig__serviceDiscoveryAddress=http://eureka-server:8761
+      - ServiceConfig__serviceAddress=http://microservicesbus.appointment.api:80
+      - ServiceConfig__serviceName=APPOINTMENTAPI
+      - ServiceConfig__serviceId=APPOINTMENTAPI-v1
+    ports:
+      - "80"
+      #- "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  microservicesbus.user.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ServiceConfig__serviceDiscoveryAddress=http://eureka-server:8761
+      - ServiceConfig__serviceAddress=http://microservicesbus.user.api:80
+      - ServiceConfig__serviceName=USERAPI
+      - ServiceConfig__serviceId=USERAPI-v1
+    ports:
+      - "80"
+      #- "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

@@ -1,0 +1,101 @@
+{
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api1/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "USERAPI",
+      "DownstreamSkipSslValidation": true,
+      "Key": "User",
+      "UpstreamPathTemplate": "/api1/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 6000,
+        "TimeoutValue": 2000
+      },
+      "HttpHandlerOptions": {
+        "AllowAutoRedirect": true,
+        "UseCookieContainer": true,
+        "UseTracing": true,
+        "MaxConnectionsPerServer": 100
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": "1",
+        "Limit": 1
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 15,
+        "Region": "usercaching"
+      }
+
+    },
+    {
+      "DownstreamPathTemplate": "/api2/{everything}",
+      "DownstreamScheme": "http",
+      "ServiceName": "APPOINTMENTAPI",
+      "DownstreamSkipSslValidation": true,
+      "Key": "Appointment",
+      "UpstreamPathTemplate": "/api2/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 6000,
+        "TimeoutValue": 2000
+      },
+      "HttpHandlerOptions": {
+        "AllowAutoRedirect": true,
+        "UseCookieContainer": true,
+        "UseTracing": true,
+        "MaxConnectionsPerServer": 100
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": "1",
+        "Limit": 1
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 15,
+        "Region": "appointmentcaching"
+      }
+    }
+  ],
+  "Aggregates": [
+    {
+    }
+  ],
+  "GlobalConfiguration": {
+    "RequestIdKey": "OcRequestId",
+    "AdministrationPath": "/administration",
+    "UserServiceDiscovery": true,
+    "ServiceDiscoveryProvider": {
+      "Type": "Eureka",
+      "Host": "eureka-server",
+      "Port": "8761",
+      "SkipSslValidation": true
+    }
+    //"BaseUrl": "https://localhost:5004/"
+  }
+}

@@ -1,0 +1,68 @@
+version: '3.4'
+
+services:
+  db:
+    container_name: db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - SA_PASSWORD=Blackberry@66
+      - ACCEPT_EULA=Y
+      - MSSQL_TCP_PORT=1433
+    ports:
+      - "1433:1433"
+      
+  eureka:
+    image: steeltoeoss/eureka-server:latest
+    hostname: eureka-server
+    restart: always
+    links:
+       - "microservicesbus.appointment.api:microservicesbus.user.api"
+    ports:
+      - "8761:8761"
+
+  rabbitmq:
+     container_name: dev_rabbit
+     hostname: rabbitmq
+     image: rabbitmq:3.6.6-management
+     environment:
+        - RABBITMQ_DEFAULT_USER=guest
+        - RABBITMQ_DEFAULT_PASS=guest
+     ports:
+        - "5672:5672"
+        - "15672:15672"
+
+  apigateway:
+    image: loms/apigateway
+    restart: always
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    depends_on:
+          - db
+
+ 
+  microservicesbus.appointment.api:
+    image: loms/microservicesbusappointmentapi
+    hostname: appointmentapi
+    restart: always
+    environment:
+        - AppointmentAPIUrl=http://AppointmentAPI
+    build:
+      context: .
+      dockerfile: MicroservicesBus.Appointment.API/Dockerfile
+    depends_on:
+          - db
+
+  microservicesbus.user.api:
+    image: loms/microservicesbususerapi
+    hostname: userapi
+    restart: always
+    environment:
+        - UserAPIUrl=http://UserAPI
+    build:
+      context: .
+      dockerfile: MicroservicesBus.User.API/Dockerfile
+    depends_on:
+          - db
+
+

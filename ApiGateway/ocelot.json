@@ -1,0 +1,88 @@
+{
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api1/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 55084
+        }
+      ],
+      "Key": "User",
+      "UpstreamPathTemplate": "/api1/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 6000,
+        "TimeoutValue":  2000
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": "1",
+        "Limit": 1
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 15,
+        "Region": "usercaching"
+      }
+
+    },
+    {
+      "DownstreamPathTemplate": "/api2/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 55082
+        }
+      ],
+      "Key": "Appointment",
+      "UpstreamPathTemplate": "/api2/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2,
+        "DurationOfBreak": 6000,
+        "TimeoutValue": 2000
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1s",
+        "PeriodTimespan": "1",
+        "Limit": 1
+      },
+      "FileCacheOptions": {
+        "TtlSeconds": 15,
+        "Region": "appointmentcaching"
+      }
+    }
+  ],
+  "Aggregates": [
+    {
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5004/"
+  }
+}

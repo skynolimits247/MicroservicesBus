@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MicroservicesBus.Appointment.Data": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "": ""
+      }
+    }
+  }
+}
